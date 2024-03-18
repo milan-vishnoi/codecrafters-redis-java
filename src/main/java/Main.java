@@ -26,9 +26,10 @@ public class Main {
           while(in.readLine()!=null)
           {
             out.write("+PONG\r\n");
+            out.flush();
           }
           
-          out.flush();
+          
        } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
         } finally {
