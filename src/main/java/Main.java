@@ -23,7 +23,6 @@ public class Main {
           {
             clientSocket = serverSocket.accept();
             final Socket sc = clientSocket;
-            handleCommand(clientSocket);
             new Thread(() -> {
               try{
                 handleCommand(sc);
