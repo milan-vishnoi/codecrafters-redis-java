@@ -26,7 +26,7 @@ public class Main {
           String line = null;
           while((line = in.readLine())!=null)
           {
-            if(line.contains("PING"))
+            if(line.toUpperCase().contains("PING"))
             out.write("+PONG\r\n");
             out.flush();
           }
