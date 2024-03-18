@@ -1,4 +1,3 @@
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,8 +23,11 @@ public class Main {
           clientSocket = serverSocket.accept();
           OutputStreamWriter out = new OutputStreamWriter(clientSocket.getOutputStream());
           BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-          System.out.println("Received:"+in.readLine());
-          out.write("+PONG\r\n");
+          while(in.readLine()!=null)
+          {
+            out.write("+PONG\r\n");
+          }
+          
           out.flush();
        } catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
