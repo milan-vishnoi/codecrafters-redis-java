@@ -23,8 +23,10 @@ public class Main {
           clientSocket = serverSocket.accept();
           OutputStreamWriter out = new OutputStreamWriter(clientSocket.getOutputStream());
           BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-          while(in.readLine()!=null)
+          String line = null;
+          while((line = in.readLine())!=null)
           {
+            if(line.contains("PING"))
             out.write("+PONG\r\n");
             out.flush();
           }
