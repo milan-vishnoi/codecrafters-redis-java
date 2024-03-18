@@ -4,9 +4,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class Main {
-  public static void main(String[] args){
+  public static void main(String[] args) throws IOException {
    // Log statements can be printed as below, they will be visible when running tests.
     System.out.println("Logs from your program will appear here!");
 
@@ -14,51 +15,33 @@ public class Main {
         ServerSocket serverSocket = null;
         Socket clientSocket = null;
         int port = 6379;
-        try {
           serverSocket = new ServerSocket(port);
           // Since the tester restarts your program quite often, setting SO_REUSEADDR
     //      // ensures that we don't run into 'Address already in use' errors
           serverSocket.setReuseAddress(true);
     //      // Wait for connection from client.
-          clientSocket = serverSocket.accept();
-          try{
-            Thread t1 = new Thread(() -> {
+          while(true)
+          {
+            clientSocket = serverSocket.accept();
+            handleCommand(clientSocket);
+            new Thread(() -> {
               try{
                 handleCommand(clientSocket);
-              }catch(Exception ex)
-              {
-                  System.out.println("Exception:"+ex.getMessage());
+              }catch(Exception e){
+                System.out.println("Received:"+e.getMessage());
               }
-              });
-              Thread t2 = new Thread(
-                () -> {
-                  try{
-                    handleCommand(clientSocket);
-                  }catch(Exception ex)
-                  {
-                      System.out.println("Exception:"+ex.getMessage());
-                  }
-                  }
-              );
-              t1.start();
-              t2.start();
-          }        
-      catch (IOException e) {
-          System.out.println("IOException: " + e.getMessage());
-        } finally {
-          try {
-            if (clientSocket != null) {
-              clientSocket.close();
-            }
-          } catch (IOException e) {
-            System.out.println("IOException: " + e.getMessage());
+            }).start();
           }
-        }
+        
   }
 
-  private static void handleCommand(Socket clientSocket) throws IOException {
-    OutputStreamWriter out = new OutputStreamWriter(clientSocket.getOutputStream());
-    BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+  private static void handleCommand(Socket clientSocket) {
+    OutputStreamWriter out = null;
+    BufferedReader in = null;
+    try
+    {
+    out = new OutputStreamWriter(clientSocket.getOutputStream());
+    in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     String line = null;
     while((line = in.readLine())!=null)
     {
@@ -66,5 +49,27 @@ public class Main {
       out.write("+PONG\r\n");
       out.flush();
     }
+    } catch(IOException ex)
+    {
+      System.out.println("Received:"+ex.getMessage());
+    }finally{
+      try{
+        if(clientSocket != null)
+        {
+          if(out != null)
+          out.close();
+  
+          if(in != null)
+          in.close();
+  
+          clientSocket.close();
+        }
+      }catch(IOException e)
+      {
+        System.out.println("Received:"+e.getMessage());
+      }
+      
+    }
+    
   }
 }
