@@ -21,18 +21,29 @@ public class Main {
           serverSocket.setReuseAddress(true);
     //      // Wait for connection from client.
           clientSocket = serverSocket.accept();
-          OutputStreamWriter out = new OutputStreamWriter(clientSocket.getOutputStream());
-          BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-          String line = null;
-          while((line = in.readLine())!=null)
-          {
-            if(line.toUpperCase().contains("PING"))
-            out.write("+PONG\r\n");
-            out.flush();
-          }
-          
-          
-       } catch (IOException e) {
+          try{
+            Thread t1 = new Thread(() -> {
+              try{
+                handleCommand(clientSocket);
+              }catch(Exception ex)
+              {
+                  System.out.println("Exception:"+ex.getMessage());
+              }
+              });
+              Thread t2 = new Thread(
+                () -> {
+                  try{
+                    handleCommand(clientSocket);
+                  }catch(Exception ex)
+                  {
+                      System.out.println("Exception:"+ex.getMessage());
+                  }
+                  }
+              );
+              t1.start();
+              t2.start();
+          }        
+      catch (IOException e) {
           System.out.println("IOException: " + e.getMessage());
         } finally {
           try {
@@ -43,5 +54,17 @@ public class Main {
             System.out.println("IOException: " + e.getMessage());
           }
         }
+  }
+
+  private static void handleCommand(Socket clientSocket) throws IOException {
+    OutputStreamWriter out = new OutputStreamWriter(clientSocket.getOutputStream());
+    BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+    String line = null;
+    while((line = in.readLine())!=null)
+    {
+      if(line.toUpperCase().contains("PING"))
+      out.write("+PONG\r\n");
+      out.flush();
+    }
   }
 }
