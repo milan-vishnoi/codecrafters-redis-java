@@ -55,6 +55,7 @@ public class Main {
       {
         String echoString = line.replace("\r\n", "");
         out.write("$"+echoString.length()+"\\r\\n"+echoString+"\\r\\n");
+        echo = false;
       }
       
    
