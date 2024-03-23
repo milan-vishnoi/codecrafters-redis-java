@@ -51,13 +51,12 @@ public class Main {
     {
        echo = true;
     }
-      if(echo && line.matches("[A-Za-z]*\r\n"))
+      if(echo && line.matches("[A-Za-z]+\r\n"))
       {
         String echoString = line.replace("\r\n", "");
         out.write("$"+echoString.length()+"\r\n"+echoString+"\r\n");
         echo = false;
-      }
-      
+      } 
    
       out.flush();
     }
