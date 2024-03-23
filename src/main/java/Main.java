@@ -51,9 +51,10 @@ public class Main {
     {
        echo = true;
     }
-      if(echo && line.toLowerCase().contains("hey"))
+      if(echo && line.matches("[A-Za-z]*\r\n"))
       {
-        out.write("$3\r\nhey\r\n");
+        String echoString = line.replace("\r\n", "");
+        out.write("$"+echoString.length()+"\\r\\n"+echoString+"\\r\\n");
       }
       
    
