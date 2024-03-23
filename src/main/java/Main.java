@@ -42,12 +42,24 @@ public class Main {
     out = new OutputStreamWriter(clientSocket.getOutputStream());
     in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     String line = null;
+    Boolean echo = false;
     while((line = in.readLine())!=null)
     {
       if(line.toUpperCase().contains("PING"))
       out.write("+PONG\r\n");
+      else if(line.toUpperCase().contains("ECHO"))
+    {
+       echo = true;
+    }
+      if(echo && line.toLowerCase().contains("hey"))
+      {
+        out.write("$3\r\nhey\r\n");
+      }
+      
+   
       out.flush();
     }
+    
     } catch(IOException ex)
     {
       System.out.println("Received:"+ex.getMessage());
