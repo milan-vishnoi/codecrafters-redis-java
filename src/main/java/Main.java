@@ -54,7 +54,7 @@ public class Main {
       if(echo && line.matches("[A-Za-z]*\r\n"))
       {
         String echoString = line.replace("\r\n", "");
-        out.write("$"+echoString.length()+"\\r\\n"+echoString+"\\r\\n");
+        out.write("$"+echoString.length()+"\r\n"+echoString+"\r\n");
         echo = false;
       }
       
