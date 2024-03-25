@@ -43,23 +43,52 @@ public class Main {
     in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     String line = null;
     Boolean echo = false;
-    while((line = in.readLine())!=null)
+    line = in.readLine();
+    if(line.startsWith("*"))
     {
-      if(line.toUpperCase().contains("PING"))
-      out.write("+PONG\r\n");
-      else if(line.toUpperCase().contains("ECHO"))
-    {
-       echo = true;
+      int noOfLines = line.charAt(1);
+      int commandLength;
+      int argumentLength;
+      for(int i = 0 ; i< noOfLines ; i++)
+      {   
+          if((line = in.readLine()).startsWith("$"))
+          {    i++;
+               commandLength = Integer.parseInt(line.substring(1,line.length()-2));
+               String command = in.readLine().substring(0,commandLength);
+               i++;
+               if(command.equalsIgnoreCase("PING"))
+               out.write("+PONG\r\n");
+               else if(command.equalsIgnoreCase("ECHO"))
+               {
+                 if((line = in.readLine()).startsWith("$"))
+                 {  i++;
+                    argumentLength = Integer.parseInt(line.substring(1,line.length()-2));
+                    String argument = in.readLine().substring(0,argumentLength);
+                    i++;
+                    out.write("$"+argumentLength+"\r\n"+argument+"\r\n");
+                 }
+                }
+          }
+          out.flush();
+      }
     }
-      if(echo && line.matches("[A-Za-z]+\r\n"))
-      {
-        String echoString = line.replace("\r\n", "");
-        out.write("$"+echoString.length()+"\r\n"+echoString+"\r\n");
-        echo = false;
-      } 
+    // while((line = in.readLine())!=null)
+    // {
+    //   if(line.toUpperCase().contains("PING"))
+    //   out.write("+PONG\r\n");
+    //   else if(line.toUpperCase().contains("ECHO"))
+    // {
+    //    echo = true;
+    // }
+    //   if(echo && line.matches("[A-Za-z]+\r\n"))
+    //   {
+    //     String echoString = line.replace("\r\n", "");
+    //     out.write("$"+echoString.length()+"\r\n"+echoString+"\r\n");
+    //     echo = false;
+    //   } 
    
-      out.flush();
-    }
+    //   out.flush();
+    // }
     
     } catch(IOException ex)
     {
