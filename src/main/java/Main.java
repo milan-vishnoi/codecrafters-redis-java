@@ -53,7 +53,7 @@ public class Main {
       {   
           if((line = in.readLine()).startsWith("$"))
           {    i++;
-               commandLength = Integer.parseInt(line.substring(1,line.length()-2));
+               commandLength = Integer.parseInt(line.substring(1));
                String command = in.readLine().substring(0,commandLength);
                i++;
                if(command.equalsIgnoreCase("PING"))
@@ -62,7 +62,7 @@ public class Main {
                {
                  if((line = in.readLine()).startsWith("$"))
                  {  i++;
-                    argumentLength = Integer.parseInt(line.substring(1,line.length()-2));
+                    argumentLength = Integer.parseInt(line.substring(1));
                     String argument = in.readLine().substring(0,argumentLength);
                     i++;
                     out.write("$"+argumentLength+"\r\n"+argument+"\r\n");
