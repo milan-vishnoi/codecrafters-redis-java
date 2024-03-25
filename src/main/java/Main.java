@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class Main {
   public static void main(String[] args) throws IOException {
@@ -47,13 +48,12 @@ public class Main {
     if(line.startsWith("*"))
     {
       int noOfLines = line.charAt(1);
-      int commandLength;
-      int argumentLength;
+      HashMap<String,String> values = new HashMap<>();
       for(int i = 0 ; i< noOfLines ; i++)
       {   
           if((line = in.readLine()).startsWith("$"))
-          {    i++;
-               commandLength = Integer.parseInt(line.substring(1));
+          { 
+               int commandLength = Integer.parseInt(line.substring(1));
                String command = in.readLine().substring(0,commandLength);
                i++;
                if(command.equalsIgnoreCase("PING"))
@@ -61,13 +61,42 @@ public class Main {
                else if(command.equalsIgnoreCase("ECHO"))
                {
                  if((line = in.readLine()).startsWith("$"))
-                 {  i++;
-                    argumentLength = Integer.parseInt(line.substring(1));
+                 { 
+                    int argumentLength = Integer.parseInt(line.substring(1));
                     String argument = in.readLine().substring(0,argumentLength);
                     i++;
                     out.write("$"+argumentLength+"\r\n"+argument+"\r\n");
                  }
                 }
+              else if(command.equalsIgnoreCase("SET"))
+              {
+                if((line = in.readLine()).startsWith("$"))
+                 { 
+                    int keyLength = Integer.parseInt(line.substring(1));
+                    String key = in.readLine().substring(0,keyLength);
+                    i++;
+                    if((line = in.readLine()).startsWith("$"))
+                    {
+                    int valueLength = Integer.parseInt(line.substring(1));
+                    String value = in.readLine().substring(0,valueLength);
+                    i++;
+                    values.put(key,value);
+                    out.write("+OK\r\n");
+                    }
+                 }
+              }
+
+              else if(command.equalsIgnoreCase("GET"))
+              {
+                if((line = in.readLine()).startsWith("$"))
+                 { 
+                    int keyLength = Integer.parseInt(line.substring(1));
+                    String key = in.readLine().substring(0,keyLength);
+                    i++;
+                    String value = values.get(key);
+                    out.write("$"+value.length()+"\r\n"+value+"\r\n");
+                 }
+              }
           }
           out.flush();
       }
