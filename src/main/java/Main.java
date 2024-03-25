@@ -115,6 +115,8 @@ public class Main {
       String key = in.readLine().substring(0, keyLength);
       i++;
       String value = values.get(key);
+      if(value == null || value.isEmpty())
+      value = "-1";
       out.write("$" + value.length() + "\r\n" + value + "\r\n");
     }
     return i;
