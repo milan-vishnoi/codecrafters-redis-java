@@ -72,23 +72,6 @@ public class Main {
           out.flush();
       }
     }
-    // while((line = in.readLine())!=null)
-    // {
-    //   if(line.toUpperCase().contains("PING"))
-    //   out.write("+PONG\r\n");
-    //   else if(line.toUpperCase().contains("ECHO"))
-    // {
-    //    echo = true;
-    // }
-    //   if(echo && line.matches("[A-Za-z]+\r\n"))
-    //   {
-    //     String echoString = line.replace("\r\n", "");
-    //     out.write("$"+echoString.length()+"\r\n"+echoString+"\r\n");
-    //     echo = false;
-    //   } 
-   
-    //   out.flush();
-    // }
     
     } catch(IOException ex)
     {
