@@ -4,8 +4,7 @@ This is a starting point for Java solutions to the
 ["Build Your Own Redis" Challenge](https://codecrafters.io/challenges/redis).
 
 In this challenge, I have built a toy Redis clone that's capable of handling
-basic commands like `PING`, `SET` and `GET`. Along the way I'll learn about
-event loops, the Redis protocol and more.
+basic commands like `PING`, `SET` and `GET`. I have also implemented the Expiry of the set value by using `PX` command.
 
 
 # Entry point
