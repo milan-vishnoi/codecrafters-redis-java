@@ -148,9 +148,10 @@ public class Main {
         i++;
         values.put(key, value);
         validDuration.put(key,Long.MAX_VALUE);
+        System.out.println("Value of i = "+i);
         if( i < noOfLines && (line=in.readLine()).startsWith("$"))
         {
-            
+            System.out.println("Within if:"+line);
             if((line=in.readLine()).toUpperCase().contains("PX"))
             { i++;
               if((line = in.readLine()).startsWith("$"))
@@ -162,6 +163,7 @@ public class Main {
               }
             }
         }
+        System.out.println("Before out.write");
         out.write("+OK\r\n");
       }
     }
