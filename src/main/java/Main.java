@@ -67,7 +67,7 @@ public class Main {
             else if (command.equalsIgnoreCase("GET"))
             handleGetCommand(out, in, values, validDuration);// i = handleGetCommand(out, in, values, validDuration, i);
           }
-          System.out.println("Came back with i="+i);
+          // System.out.println("Came back with i="+i);
           out.flush();
       }
     }
