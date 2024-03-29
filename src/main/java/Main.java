@@ -47,6 +47,7 @@ public class Main {
     if(line.startsWith("*"))
     {
       int noOfLines = line.charAt(1);
+      System.out.println("Number of lines:"+ noOfLines);
       HashMap<String,String> values = new HashMap<>();
       HashMap<String,Long> validDuration = new HashMap<>();
       for(int i = 0 ; i< noOfLines ; i++)
@@ -65,6 +66,7 @@ public class Main {
             else if (command.equalsIgnoreCase("GET"))
               i = handleGetCommand(out, in, values, validDuration, i);
           }
+          System.out.println("Came back with i="+i);
           out.flush();
       }
     }
