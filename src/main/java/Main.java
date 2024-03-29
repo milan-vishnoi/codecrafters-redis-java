@@ -157,6 +157,7 @@ public class Main {
               {
                 int expiryLength = Integer.parseInt(line.substring(1));
                 int expiry = Integer.parseInt(in.readLine().substring(0, expiryLength));
+                i++;
                 validDuration.put(key, System.currentTimeMillis()+expiry);
               }
             }
