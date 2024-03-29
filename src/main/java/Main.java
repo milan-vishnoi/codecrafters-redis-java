@@ -61,7 +61,7 @@ public class Main {
             else if (command.equalsIgnoreCase("ECHO"))
               i = handleEchoCommand(out, in, i);
             else if (command.equalsIgnoreCase("SET"))
-              i = handleSetCommand(out, in, values, validDuration, i);
+              i = handleSetCommand(out, in, values, validDuration, i, noOfLines);
             else if (command.equalsIgnoreCase("GET"))
               i = handleGetCommand(out, in, values, validDuration, i);
           }
@@ -132,7 +132,7 @@ public class Main {
   }
 
   private static int handleSetCommand(OutputStreamWriter out, BufferedReader in, HashMap<String, String> values, 
-  HashMap<String,Long> validDuration, int i)
+  HashMap<String,Long> validDuration, int i, int noOfLines)
       throws IOException 
       {
     String line;
@@ -148,7 +148,7 @@ public class Main {
         i++;
         values.put(key, value);
         validDuration.put(key,Long.MAX_VALUE);
-        if((line=in.readLine()) != null && line.startsWith("$"))
+        if( i < noOfLines && (line=in.readLine()).startsWith("$"))
         {
             
             if((line=in.readLine()).toUpperCase().contains("PX"))
