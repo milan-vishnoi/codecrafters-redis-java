@@ -148,9 +148,9 @@ public class Main {
         i++;
         values.put(key, value);
         validDuration.put(key,Long.MAX_VALUE);
-        if((line=in.readLine()) != null && (line = in.readLine()).startsWith("$"))
+        if((line=in.readLine()) != null && line.startsWith("$"))
         {
-          i++;
+            i++;
             if(line.toUpperCase().contains("PX"))
             {
               if((line = in.readLine()).startsWith("$"))
