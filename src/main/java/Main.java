@@ -50,7 +50,8 @@ public class Main {
       System.out.println("Number of lines:"+ noOfLines);
       HashMap<String,String> values = new HashMap<>();
       HashMap<String,Long> validDuration = new HashMap<>();
-      for(int i = 0 ; i< noOfLines ; i++)
+      int i=0;
+      while(true)//for(int i = 0 ; i< noOfLines ; i++)
       {   
           if((line = in.readLine()).startsWith("$"))
           { 
