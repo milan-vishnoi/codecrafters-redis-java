@@ -48,6 +48,7 @@ public class Main {
     {
       int noOfLines = line.charAt(1);
       HashMap<String,String> values = new HashMap<>();
+      HashMap<String,Long> validDuration = new HashMap<>();
       for(int i = 0 ; i< noOfLines ; i++)
       {   
           if((line = in.readLine()).startsWith("$"))
@@ -60,9 +61,9 @@ public class Main {
             else if (command.equalsIgnoreCase("ECHO"))
               i = handleEchoCommand(out, in, i);
             else if (command.equalsIgnoreCase("SET"))
-              i = handleSetCommand(out, in, values, i);
+              i = handleSetCommand(out, in, values, validDuration, i);
             else if (command.equalsIgnoreCase("GET"))
-              i = handleGetCommand(out, in, values, i);
+              i = handleGetCommand(out, in, values, validDuration, i);
           }
           out.flush();
       }
@@ -105,7 +106,8 @@ public class Main {
     return i;
   }
 
-  private static int handleGetCommand(OutputStreamWriter out, BufferedReader in, HashMap<String, String> values, int i)
+  private static int handleGetCommand(OutputStreamWriter out, BufferedReader in, HashMap<String, String> values,
+  HashMap<String,Long> validDuration, int i)
       throws IOException 
       {
     String line;
@@ -117,12 +119,20 @@ public class Main {
       String value = values.get(key);
       if(value == null || value.isEmpty())
       value = "-1";
+      else if(validDuration.get(key)< System.currentTimeMillis())
+      {
+        value = "-1";
+        values.remove(key);
+        validDuration.remove(key);
+      }
+
       out.write("$" + value.length() + "\r\n" + value + "\r\n");
     }
     return i;
   }
 
-  private static int handleSetCommand(OutputStreamWriter out, BufferedReader in, HashMap<String, String> values, int i)
+  private static int handleSetCommand(OutputStreamWriter out, BufferedReader in, HashMap<String, String> values, 
+  HashMap<String,Long> validDuration, int i)
       throws IOException 
       {
     String line;
@@ -131,11 +141,26 @@ public class Main {
       int keyLength = Integer.parseInt(line.substring(1));
       String key = in.readLine().substring(0, keyLength);
       i++;
-      if ((line = in.readLine()).startsWith("$")) {
+      if ((line = in.readLine()).startsWith("$")) 
+      {
         int valueLength = Integer.parseInt(line.substring(1));
         String value = in.readLine().substring(0, valueLength);
         i++;
         values.put(key, value);
+        validDuration.put(key,Long.MAX_VALUE);
+        if((line=in.readLine()) != null && (line = in.readLine()).startsWith("$"))
+        {
+          i++;
+            if(line.toUpperCase().contains("PX"))
+            {
+              if((line = in.readLine()).startsWith("$"))
+              {
+                int expiryLength = Integer.parseInt(line.substring(1));
+                int expiry = Integer.parseInt(in.readLine().substring(0, expiryLength));
+                validDuration.put(key, System.currentTimeMillis()+expiry);
+              }
+            }
+        }
         out.write("+OK\r\n");
       }
     }
