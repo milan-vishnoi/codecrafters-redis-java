@@ -47,7 +47,7 @@ public class Main {
     if(line.startsWith("*"))
     {
       int noOfLines = line.charAt(1);
-      System.out.println("Number of lines:"+ noOfLines);
+      System.out.println("Number of lines:"+ line);
       HashMap<String,String> values = new HashMap<>();
       HashMap<String,Long> validDuration = new HashMap<>();
       for(int i = 0 ; i< noOfLines ; i++)
