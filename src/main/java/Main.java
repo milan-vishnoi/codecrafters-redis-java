@@ -128,7 +128,10 @@ public class Main {
         values.remove(key);
         validDuration.remove(key);
       }
-
+      
+      if(value.equals("-1"))
+      out.write("$" + value+ "\r\n");
+      else
       out.write("$" + value.length() + "\r\n" + value + "\r\n");
     }
     return i;
