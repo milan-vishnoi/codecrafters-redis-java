@@ -50,22 +50,22 @@ public class Main {
       System.out.println("Number of lines:"+ noOfLines);
       HashMap<String,String> values = new HashMap<>();
       HashMap<String,Long> validDuration = new HashMap<>();
-      int i=0;
+      // int i=0;
       while(true)//for(int i = 0 ; i< noOfLines ; i++)
       {   
           if((line = in.readLine()).startsWith("$"))
           { 
             int commandLength = Integer.parseInt(line.substring(1));
             String command = in.readLine().substring(0, commandLength);
-            i++;
+            // i++;
             if (command.equalsIgnoreCase("PING"))
               out.write("+PONG\r\n");
             else if (command.equalsIgnoreCase("ECHO"))
-              i = handleEchoCommand(out, in, i);
+            handleEchoCommand(out, in);// i = handleEchoCommand(out, in, i);
             else if (command.equalsIgnoreCase("SET"))
-              i = handleSetCommand(out, in, values, validDuration, i, noOfLines);
+            handleSetCommand(out, in, values, validDuration, noOfLines); // i = handleSetCommand(out, in, values, validDuration, i, noOfLines);
             else if (command.equalsIgnoreCase("GET"))
-              i = handleGetCommand(out, in, values, validDuration, i);
+            handleGetCommand(out, in, values, validDuration);// i = handleGetCommand(out, in, values, validDuration, i);
           }
           System.out.println("Came back with i="+i);
           out.flush();
@@ -96,21 +96,21 @@ public class Main {
     
   }
 
-  private static int handleEchoCommand(OutputStreamWriter out, BufferedReader in, int i) throws IOException 
+  private static void handleEchoCommand(OutputStreamWriter out, BufferedReader in) throws IOException 
   {
     String line;
     if((line = in.readLine()).startsWith("$"))
      { 
         int argumentLength = Integer.parseInt(line.substring(1));
         String argument = in.readLine().substring(0,argumentLength);
-        i++;
+        // i++;
         out.write("$"+argumentLength+"\r\n"+argument+"\r\n");
      }
-    return i;
+    // return i;
   }
 
-  private static int handleGetCommand(OutputStreamWriter out, BufferedReader in, HashMap<String, String> values,
-  HashMap<String,Long> validDuration, int i)
+  private static void handleGetCommand(OutputStreamWriter out, BufferedReader in, HashMap<String, String> values,
+  HashMap<String,Long> validDuration)
       throws IOException 
       {
     String line;
@@ -118,7 +118,7 @@ public class Main {
     {
       int keyLength = Integer.parseInt(line.substring(1));
       String key = in.readLine().substring(0, keyLength);
-      i++;
+      // i++;
       String value = values.get(key);
       if(value == null || value.isEmpty())
       value = "-1";
@@ -134,13 +134,14 @@ public class Main {
       else
       out.write("$" + value.length() + "\r\n" + value + "\r\n");
     }
-    return i;
+    // return i;
   }
 
-  private static int handleSetCommand(OutputStreamWriter out, BufferedReader in, HashMap<String, String> values, 
-  HashMap<String,Long> validDuration, int i, int noOfLines)
+  private static void handleSetCommand(OutputStreamWriter out, BufferedReader in, HashMap<String, String> values, 
+  HashMap<String,Long> validDuration, int noOfLines)
       throws IOException 
       {
+        int i = 1;
     String line;
     if ((line = in.readLine()).startsWith("$")) 
     {
@@ -173,6 +174,6 @@ public class Main {
         out.write("+OK\r\n");
       }
     }
-    return i;
+    // return i;
   }
 }
